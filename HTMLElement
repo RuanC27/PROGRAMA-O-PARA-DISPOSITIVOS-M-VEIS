@@ -1,0 +1,60 @@
+<!-- counter-component.js -->
+<script>
+class CounterComponent extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+
+    this.count = parseInt(this.getAttribute('initial') || '0', 10);
+
+    this.shadowRoot.innerHTML = `
+      <style>
+        :host {
+          display: inline-block;
+          font-family: sans-serif;
+          padding: 1rem;
+          border: 2px solid #ccc;
+          border-radius: 8px;
+          background: #f9f9f9;
+        }
+        .counter {
+          font-size: 2rem;
+          margin: 1rem 0;
+        }
+        button {
+          padding: 0.5rem 1rem;
+          margin: 0 0.5rem;
+          font-size: 1rem;
+          cursor: pointer;
+        }
+      </style>
+      <div>
+        <button id="decrease">-</button>
+        <span class="counter">${this.count}</span>
+        <button id="increase">+</button>
+      </div>
+    `;
+  }
+
+  connectedCallback() {
+    this.shadowRoot.querySelector('#increase').addEventListener('click', () => this.increment());
+    this.shadowRoot.querySelector('#decrease').addEventListener('click', () => this.decrement());
+  }
+
+  increment() {
+    this.count++;
+    this.updateDisplay();
+  }
+
+  decrement() {
+    this.count--;
+    this.updateDisplay();
+  }
+
+  updateDisplay() {
+    this.shadowRoot.querySelector('.counter').textContent = this.count;
+  }
+}
+
+customElements.define('counter-component', CounterComponent);
+</script>
